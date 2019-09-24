@@ -1,0 +1,11 @@
+controller:
+   # Auto Scaling Settings
+   autoscaling:
+     enabled: true
+     # Minimum amount of running pods
+     minReplicas: 2
+     # Maximum amount of running pods
+     maxReplicas: 11
+     # Scaling threshold
+     targetCPUUtilizationPercentage: 80
+     targetMemoryUtilizationPercentage: 80
