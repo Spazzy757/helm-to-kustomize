@@ -20,6 +20,7 @@ Template out the yaml into a file, this is the step where you add the values to 
 helm template \
 --name ingress-controller \
 --output-dir base \
+--namespace ingress \
 --values values.yaml \
 charts/nginx-ingress
 ```
@@ -50,7 +51,7 @@ mv base/nginx-ingress/templates/* base/nginx-ingress && rm -rf base/nginx-ingres
 
 ## Step 3: create the Kustomization config
 
-One thing that is not very well known is that helm does not handle namespaces very well, when you define `--namespace` while running `helm install` tiller does all the namespace work at runtime, meaning that in order to be more decalartive you will need to create you namespace config manually:
+One thing that is not very well known is that helm does not handle namespaces very well, when you define `--namespace` while running `helm install` tiller does all the namespace work at runtime, meaning that in order to be more declartive you will need to create you namespace config manually:
 
 ```
 cat <<EOF > base/nginx-ingress/namespace.yaml
@@ -88,7 +89,7 @@ EOF
 
 ## Step 4: Apply your new base to cluster
 
-as of kubectl 1.14 kustomize is intergrated therfore you can simply run:
+as of Kubectl 1.14 Kustomize is integrated therefore you can simply run:
 
 ```
 kubectl apply -k base/nginx-ingress
