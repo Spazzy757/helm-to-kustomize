@@ -19,13 +19,20 @@ So what is the way forward, we want to keep the awesome magic of Helm but at the
 
 ## Step 1: Helm Fetch
 
+Add the stable repo
+
+```bash
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update
+```
+
 Fetch the chart as helm template needs it locally to template out the yaml
 
 ```bash
 helm fetch \
 --untar \
 --untardir charts \
-stable/nginx-ingress
+nginx-stable/nginx-ingress
 ```
 
 
@@ -35,10 +42,10 @@ Template out the yaml into a file, this is the step where you add the values to 
 
 ```bash
 helm template \
---name ingress-controller \
 --output-dir base \
 --namespace ingress \
 --values values.yaml \
+ingress-controller \
 charts/nginx-ingress
 ```
 
@@ -79,30 +86,15 @@ metadata:
 EOF
 ```
 
-You will need to create a `kustomization.yaml` that lists all your resources, this is probably the most time-consuming part as this 
-will require you to go through the resources, you can also add some common labels etc.
+You can now go into the directory where the configuration is found and use kustomize to generathe the config
 
 ```bash
- cat <<EOF > base/nginx-ingress/kustomization.yaml
- namespace: "ingress"
- commonLabels:
-     roles: routing
- resources:
- - namespace.yaml
- - clusterrole.yaml
- - clusterrolebinding.yaml
- - controller-deployment.yaml
- - controller-hpa.yaml
- - controller-role.yaml
- - controller-rolebinding.yaml
- - controller-service.yaml
- - controller-serviceaccount.yaml
- - default-backend-deployment.yaml
- - default-backend-service.yaml
- - default-backend-serviceaccount.yaml
-EOF
-```
+cd base/nginx-ingress
 
+kustomize create --autodetect
+
+cd ../..
+```
 
 ## Step 4: Apply your new base to a cluster
 
