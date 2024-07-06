@@ -75,6 +75,8 @@ mv base/nginx-ingress/templates/* base/nginx-ingress && rm -rf base/nginx-ingres
 
 ## Step 3: create the Kustomization config
 
+***Tiller is deprecated with the release of Helm 3.0.0 on November 13, 2019
+ 
 One thing that is not very well known is that helm does not handle namespaces very well, when you define `--namespace` while running `helm install` tiller does all the namespace work at runtime, it does not actually specify the namespace on any of the resources, meaning that in order to be more declarative you will need to create you namespace config manually:
 
 ```bash
